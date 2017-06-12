@@ -22,4 +22,9 @@ public class Jugador {
 		
 	}
 
+	public char ficha() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

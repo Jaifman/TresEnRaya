@@ -36,10 +36,14 @@ public class TresEnRaya {
 			//Pasamos el turno al siguiente jugador
 			turno.cambiar();
 			
-		}while(tablero.hayTresEnRaya());
+		}while(!tablero.hayTresEnRaya());//Lo anterior se ejecuta mientras no haya 3 en raya
 		//Establecemos el vencedor
 		jugadores[turno.noEsTurno()].esVencedor();
 		
+	}
+	
+	public static void main(String[] args) {
+		new TresEnRaya().jugar();
 	}
 
 }
