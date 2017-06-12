@@ -1,18 +1,28 @@
 package com.jaif.tictactoe;
 
-public class Turno {
+import java.util.Random;
 
+public class Turno {
+	
+	private int valor;
+	
+	//Establecemos el turno inicial de forma aleatoria
+	public Turno(){		
+		valor = new Random().nextInt(1);
+	}
+	
+	//Método que devuelve a quien le toca jugar
 	public int esTurno() {
 		
-		return 0;
+		return valor;
 	}
-
-	public void cambiar() {		
-		
-	}
-
+	//Método que devuelve a quien no le toca jugar
 	public int noEsTurno() {		
-		return 0;
-	}
+		return (valor+1)%2;
+	}	
+	//Método para cambiar el turno
+	public void cambiar() {		
+		this.noEsTurno();
+	}	
 
 }
