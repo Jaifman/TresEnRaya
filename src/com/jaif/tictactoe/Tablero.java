@@ -82,8 +82,11 @@ public class Tablero {
 	}
 
 	public boolean ocupado(Coordenada coordenada) {
-		// TODO Auto-generated method stub
-		return false;
+		return casillas[coordenada.getFila()][coordenada.getColumna()] != '_';
 	}
+
+	public void setFicha(Coordenada coordenada, char ficha) {		
+		
+	}	
 
 }
