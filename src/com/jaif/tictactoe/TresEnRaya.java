@@ -22,6 +22,24 @@ public class TresEnRaya {
 	//Método que contiene la lógica del programa
 	public void jugar(){
 		
+		do{
+			//Hacemos visible el tablero
+			tablero.mostrar();
+			
+			if(!tablero.estaCompleto(jugadores[turno.esTurno()])){				
+				//Obtenemos el turno del jugador y establecemos su movimiento
+				jugadores[turno.esTurno()].setFicha(tablero);				
+			}else{
+				//Ejecutamos el movimiento
+				jugadores[turno.esTurno()].moverFicha(tablero);
+			}			
+			//Pasamos el turno al siguiente jugador
+			turno.cambiar();
+			
+		}while(tablero.hayTresEnRaya());
+		//Establecemos el vencedor
+		jugadores[turno.noEsTurno()].esVencedor();
+		
 	}
 
 }
