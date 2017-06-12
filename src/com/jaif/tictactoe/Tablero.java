@@ -72,13 +72,18 @@ public class Tablero {
 		int fichas = 0;
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++){
-				if(jugador.ficha()==casillas[i][j]){
+				if(jugador.getFicha()==casillas[i][j]){
 					fichas++;
 				}
 			}
 		}
 		
 		return fichas == 3;
+	}
+
+	public boolean ocupado(Coordenada coordenada) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
