@@ -19,12 +19,6 @@ public class Intervalo {
 		
 		return inferior<=valor && valor <= superior;
 		
-	}
+	}	
 	
-	
-	/*public boolean incluye(Intervalo intervalo){
-		
-		return this.incluye(intervalo.inferior) && this.incluye(intervalo.superior);
-		
-	}*/
 }
