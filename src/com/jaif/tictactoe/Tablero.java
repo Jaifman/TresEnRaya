@@ -3,19 +3,16 @@ package com.jaif.tictactoe;
 public class Tablero {
 	
 	//Declaramos atributos 
-	private char[][] casillas;
+	//private char[][] casillas;
+	private Coordenada[][] fichas;
 	private static final int DIMENSION = 3;
 	private static final char VACIA = '_';
 	
 	//Constructor de la clase
 	public Tablero(){
+		
 		//Establecemos el tablero con 3x3 casillas sin rellenar
-		casillas = new char[DIMENSION][DIMENSION];
-		for (int i = 0; i < DIMENSION; i++) {
-			for (int j = 0; j < DIMENSION; j++){
-				casillas[i][j] = VACIA;
-			}
-		}
+		fichas = new Coordenada[2][3];		
 		
 	}
 	
@@ -26,7 +23,7 @@ public class Tablero {
 			
 			for (int j = 0; j < DIMENSION; j++) {	
 				
-				System.out.print(" "+casillas[i][j]);	
+				System.out.print(this.getFicha(new Coordenada(i,j)));	
 				
 			}
 			
@@ -38,6 +35,37 @@ public class Tablero {
 		
 	}
 	
+	//Métodos privados de apoyo al método mostrar()
+	private char getFicha(Coordenada coordenada){
+		
+		if(this.incluye(coordenada,0)){
+			
+			return 'o';
+		
+		}if(this.incluye(coordenada,1)){
+			
+			return 'x';
+		
+		}
+		return VACIA;
+	}
+	
+	private boolean incluye(Coordenada coordenada,int jugador){
+		
+		for (int i = 0; i < fichas[jugador].length; i++) {
+			
+			if(fichas[jugador][i]!=null && fichas[jugador][i].igual(coordenada)){
+				
+				return true;
+				
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
 	//Método que determina si hay 3 en raya
 	public boolean hayTresEnRaya() {
 		
@@ -46,94 +74,104 @@ public class Tablero {
 	}
 	
 	//Método que contiene el algoritmo para determinar si hay 3 en raya
-	private boolean hayTresEnRaya(char ficha){
+	private boolean hayTresEnRaya(int jugador){
 		
-		int filas[] = new int[DIMENSION];
-		int columnas[] = new int[DIMENSION];
-		int diagonal = 0;
-		int secundaria = 0;
+		int direccion = fichas[jugador][0].direccion(fichas[jugador][1]);
 		
-		//Comprobamos fichas y sumamos posicionalmente para llegar a 3
-		for (int i = 0; i < DIMENSION; i++) {
+		if(direccion == -1){
 			
-			for (int j = 0; j < DIMENSION; j++){
-				
-				if(ficha==casillas[i][j]){
-					
-					filas[i]++;
-					columnas[j]++;
-					
-					if(i==j){
-						
-						diagonal++;
-						
-					}if(i+j==2){
-						
-						secundaria++;
-						
-					}
-				}
-			}
+			return false;
+			
 		}
-		//Si alguna de las posibilidades suma 3 ya tenemos ganador
-		if(diagonal==3 || secundaria==3){
-			
-			return true;
-			
-		}else{
-			
-			for (int i = 0; i < 3; i++) {
+		
+		return direccion == fichas[jugador][1].direccion(fichas[jugador][2]);
+		
+	}
+	
+	//Método para comprobar que el jugador ha agotado sus fichas
+	public boolean estaCompleto(Jugador jugador){
+		
+		int fila = this.getFila(jugador.getFicha());	
+		int contador = 0;		
 				
-				if(filas[i]==3 || columnas[i]==3){
-					
-					return true;
-					
-				}
+		for (int i = 0; i < fichas[fila].length; i++) {
+			if(fichas[fila][i] != null){
+				
+				contador++;
+				
 			}
+			
+		}
+		
+		return contador == DIMENSION;
+		
+	}	
+	
+	//Método que devuelve casillas ocupadas
+	public boolean ocupado(Coordenada coordenada, char ficha){
+		
+		int fila = this.getFila(ficha);		
+		
+		for (int i = 0; i < fichas[fila].length; i++) {
+			
+			if(fichas[fila][i] != null && fichas[fila][i].igual(coordenada)){
+				
+				return true;
+				
+			}
+			
 		}
 		
 		return false;
 		
 	}
 	
-	//Método para comprobar que el jugador ha agotado sus fichas
-	public boolean estaCompleto(Jugador jugador) {
-		int fichas = 0;
-		for (int i = 0; i < DIMENSION; i++) {
-			for (int j = 0; j < DIMENSION; j++){
-				if(jugador.getFicha()==casillas[i][j]){
-					fichas++;
-				}
-			}
-		}
-		
-		return fichas == DIMENSION;
-	}	
-	
-	//Método que devuelve casillas ocupadas
-	public boolean ocupado(Coordenada coordenada) {
+	//Método que devuelve casillas ocupadas por una ficha determinada
+	public boolean ocupado(Coordenada coordenada){
 		
 		return !this.ocupado(coordenada,VACIA);
 		
 	}
 	
-	//Método que devuelve casillas ocupadas por una ficha determinada
-		public boolean ocupado(Coordenada coordenada, char ficha){
-			
-			return casillas[coordenada.getFila()-1][coordenada.getColumna()-1] == ficha;
-			
-		}
-	
 	//Método para colocar ficha
 	public void setFicha(Coordenada coordenada, char ficha) {
 		
-		casillas[coordenada.getFila()-1][coordenada.getColumna()-1] = ficha;
+		int fila = this.getFila(ficha);
+		int i = 0;		
+		
+		while(fichas[fila][i] != null){
+			i++;
+		}
+		
+		fichas[fila][i] = coordenada;
+	}
+	
+	private int getFila(char ficha){
+				
+		if(ficha == 'o'){
+			
+			return 0;
+					
+		}
+		
+		return 1;			
 		
 	}
 	
 	//Método para retirar una ficha
 	public void retirarFicha(Coordenada coordenada){
-		this.setFicha(coordenada, VACIA);
+		
+		for (int i = 0; i < fichas.length; i++) {
+			
+			for (int j = 0; j < fichas[i].length; j++) {
+				
+				if(fichas[i][j] != null && fichas[i][j].igual(coordenada)){
+					
+					fichas[i][j] = null;
+				}
+				
+			}
+		}
 	}
 
 }
